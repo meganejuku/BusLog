@@ -106,7 +106,6 @@ function App() {
               ログイン
             </button>
             <p className="text-sm text-gray-500 text-center">
-              ユーザー名: user / パスワード: pass123
             </p>
           </form>
         </div>
