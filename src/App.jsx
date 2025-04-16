@@ -9,95 +9,50 @@ function App() {
   const [password, setPassword] = useState('')
   const [isRegistering, setIsRegistering] = useState(false)
 
-  // 統計データを取得
-  const fetchStats = async () => {
-    try {
-      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/buslog/stats`, {
-        credentials: 'include',
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      })
-      const data = await response.json()
-      if (response.ok) {
-        setCount(data.rideCount)
-        setLastRide(data.lastRide ? new Date(data.lastRide) : null)
-      }
-    } catch (error) {
-      console.error('データ取得エラー:', error)
+  // ローカルデータを取得
+  const loadLocalData = () => {
+    const savedData = localStorage.getItem('buslogData')
+    if (savedData) {
+      const data = JSON.parse(savedData)
+      setCount(data.count)
+      setLastRide(data.lastRide ? new Date(data.lastRide) : null)
     }
   }
 
-  // 認証状態でデータを取得
+  // データを読み込む
   useEffect(() => {
-    if (token) {
-      fetchStats()
-    }
-  }, [token])
+    loadLocalData()
+  }, [])
 
-  const handleRide = async () => {
-    try {
-      await fetch(`${import.meta.env.VITE_API_BASE_URL}/buslog/ride`, {
-        method: 'POST',
-        credentials: 'include',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        }
-      })
-      fetchStats()
-    } catch (error) {
-      console.error('乗車記録エラー:', error)
+  const handleRide = () => {
+    const newCount = count + 1
+    const newLastRide = new Date()
+    const data = {
+      count: newCount,
+      lastRide: newLastRide.toISOString()
     }
+    localStorage.setItem('buslogData', JSON.stringify(data))
+    setCount(newCount)
+    setLastRide(newLastRide)
   }
 
-  const handleReset = async () => {
+  const handleReset = () => {
     if (window.confirm('本当にデータをリセットしますか？')) {
-      try {
-        await fetch(`${import.meta.env.VITE_API_BASE_URL}/buslog/reset`, {
-          method: 'POST',
-          credentials: 'include',
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json'
-          }
-        })
-        fetchStats()
-      } catch (error) {
-        console.error('リセットエラー:', error)
-      }
+      localStorage.removeItem('buslogData')
+      setCount(0)
+      setLastRide(null)
     }
   }
 
-  const handleAuth = async (e) => {
+  const handleAuth = (e) => {
     e.preventDefault()
-    const endpoint = isRegistering ? 'register' : 'login'
-    
-    try {
-      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/auth/${endpoint}`, {
-        method: 'POST',
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ username, password })
-      })
-      
-      const data = await response.json()
-      if (response.ok) {
-        if (endpoint === 'login') {
-          setToken(data.token)
-          localStorage.setItem('token', data.token)
-        } else {
-          alert('登録が完了しました。ログインしてください。')
-          setIsRegistering(false)
-        }
-      } else {
-        alert(data.error || 'エラーが発生しました')
-      }
-    } catch (error) {
-      console.error('認証エラー:', error)
+    // 簡易認証 (ユーザー名のみチェック)
+    if (username.trim() === '') {
+      alert('ユーザー名を入力してください')
+      return
     }
+    setToken(username)
+    localStorage.setItem('token', username)
   }
 
   const handleLogout = () => {
