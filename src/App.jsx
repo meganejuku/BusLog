@@ -47,8 +47,8 @@ function App() {
   const handleAuth = (e) => {
     e.preventDefault()
     // 簡易認証 (固定のユーザー名/パスワード)
-    const validUsername = 'user'
-    const validPassword = 'pass123'
+    const validUsername = 'にょ'
+    const validPassword = '12021910'
     
     if (username.trim() === validUsername && password === validPassword) {
       setToken(username)
