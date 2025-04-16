@@ -37,7 +37,7 @@ function App() {
   }
 
   const handleReset = () => {
-    if (window.confirm('本当にデータをリセットしますか？')) {
+    if (window.confirm('本当に乗車記録を全てリセットしますか？\nこの操作は元に戻せません')) {
       localStorage.removeItem('buslogData')
       setCount(0)
       setLastRide(null)
@@ -61,8 +61,8 @@ function App() {
   const handleLogout = () => {
     setToken(null)
     localStorage.removeItem('token')
-    setCount(0)
-    setLastRide(null)
+    // 乗車データは保持する
+    loadLocalData() // データを再読み込み
   }
 
   const formatDate = (date) => {
