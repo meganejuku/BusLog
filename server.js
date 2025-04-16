@@ -1,15 +1,18 @@
 const express = require('express')
-const cors = require('cors')
-const sqlite3 = require('sqlite3').verbose()
-const jwt = require('jsonwebtoken')
-const bcrypt = require('bcryptjs')
-const db = require('./db')
-
 const app = express()
-const PORT = 3001
+const path = require('path')
+const cors = require('cors')
 
-// ミドルウェア設定
-app.use(cors())
+// データベース接続
+const { initDb } = require('./db')
+initDb()
+
+// ミドルウェア
+app.use(express.json())
+app.use(cors({
+  origin: true,
+  credentials: true
+}))
 app.use(express.json())
 
 // データベース初期化

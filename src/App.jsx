@@ -13,6 +13,7 @@ function App() {
   const fetchStats = async () => {
     try {
       const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/buslog/stats`, {
+        credentials: 'include',
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -38,6 +39,7 @@ function App() {
     try {
       await fetch(`${import.meta.env.VITE_API_BASE_URL}/buslog/ride`, {
         method: 'POST',
+        credentials: 'include',
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -54,6 +56,7 @@ function App() {
       try {
         await fetch(`${import.meta.env.VITE_API_BASE_URL}/buslog/reset`, {
           method: 'POST',
+          credentials: 'include',
           headers: {
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'
@@ -73,6 +76,7 @@ function App() {
     try {
       const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/auth/${endpoint}`, {
         method: 'POST',
+        credentials: 'include',
         headers: {
           'Content-Type': 'application/json'
         },
