@@ -4,7 +4,7 @@ const path = require('path')
 const cors = require('cors')
 
 // データベース接続
-const { initDb } = require('./db')
+const { initDb } = require('../db')
 initDb()
 
 // ミドルウェア
@@ -19,11 +19,11 @@ app.use(express.json())
 db.initialize()
 
 // 認証ルート
-const authRoutes = require('./routes/auth')
+const authRoutes = require('../routes/auth')
 app.use('/api/auth', authRoutes)
 
 // バスログデータルート
-const buslogRoutes = require('./routes/buslog')
+const buslogRoutes = require('../routes/buslog')
 app.use('/api/buslog', buslogRoutes)
 
 app.listen(PORT, () => {
