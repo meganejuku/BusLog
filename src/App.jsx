@@ -46,13 +46,16 @@ function App() {
 
   const handleAuth = (e) => {
     e.preventDefault()
-    // 簡易認証 (ユーザー名のみチェック)
-    if (username.trim() === '') {
-      alert('ユーザー名を入力してください')
-      return
+    // 簡易認証 (固定のユーザー名/パスワード)
+    const validUsername = 'user'
+    const validPassword = 'pass123'
+    
+    if (username.trim() === validUsername && password === validPassword) {
+      setToken(username)
+      localStorage.setItem('token', username)
+    } else {
+      alert('ユーザー名またはパスワードが正しくありません')
     }
-    setToken(username)
-    localStorage.setItem('token', username)
   }
 
   const handleLogout = () => {
@@ -100,16 +103,11 @@ function App() {
               type="submit"
               className="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg transition-colors"
             >
-              {isRegistering ? '登録' : 'ログイン'}
+              ログイン
             </button>
-            
-            <button
-              type="button"
-              onClick={() => setIsRegistering(!isRegistering)}
-              className="w-full text-blue-500 hover:text-blue-700 text-sm"
-            >
-              {isRegistering ? '既にアカウントをお持ちですか？ログイン' : '新規登録はこちら'}
-            </button>
+            <p className="text-sm text-gray-500 text-center">
+              ユーザー名: user / パスワード: pass123
+            </p>
           </form>
         </div>
       </div>
