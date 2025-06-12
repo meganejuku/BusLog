@@ -1,8 +1,8 @@
 const sqlite3 = require('sqlite3').verbose()
 const path = require('path')
 
-const dbPath = path.join(__dirname, 'buslog.db')
-const db = new sqlite3.Database(dbPath)
+const dbFile = process.env.NODE_ENV === 'test' ? ':memory:' : path.join(__dirname, 'buslog.db')
+const db = new sqlite3.Database(dbFile)
 
 const initialize = () => {
   db.serialize(() => {
